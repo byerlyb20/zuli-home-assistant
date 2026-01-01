@@ -1,0 +1,18 @@
+{
+  "domain": "zuli",
+  "name": "Zuli",
+  "version": "0.0.1",
+  "bluetooth": [
+    {
+      "connectable": true,
+      "service_uuid": "04ee929b-bb13-4e77-8160-18552daf06e1"
+    }
+  ],
+  "codeowners": ["@byerlyb20"],
+  "config_flow": true,
+  "dependencies": ["bluetooth", "switch", "light", "sensor", "bluetooth_adapters"],
+  "documentation": "https://www.home-assistant.io/integrations/zuli",
+  "iot_class": "local_polling",
+  "quality_scale": "internal",
+  "requirements": ["zuli==0.2.1"]
+}
