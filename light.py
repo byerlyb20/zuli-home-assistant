@@ -32,9 +32,6 @@ async def async_setup_entry(
 class ZuliLight(CoordinatorEntity, LightEntity):
     """Representation of a Zuli Smartplug in dimmable mode."""
 
-    _brightness: int | None
-    _is_appliance: bool | None
-
     def __init__(self, coordinator: ZuliCoordinator, name: str) -> None:
         super().__init__(coordinator)
         self._device: ZuliSmartplug = coordinator.device # type: ignore
@@ -73,7 +70,7 @@ class ZuliLight(CoordinatorEntity, LightEntity):
 
     @property
     def available(self) -> bool:
-        return self._is_appliance == False
+        return self._is_appliance == False and self.coordinator.last_update_success
 
     @property
     def is_on(self) -> bool | None:

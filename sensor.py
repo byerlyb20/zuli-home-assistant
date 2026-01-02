@@ -55,8 +55,6 @@ async def async_setup_entry(
 class ZuliPowerReadingSensor(CoordinatorEntity, SensorEntity):
     """Representation of a power-related sensor in a Zuli Smartplug."""
 
-    _value: int | None
-
     def __init__(self,
         coordinator: ZuliCoordinator,
         device_name: str,
@@ -72,6 +70,7 @@ class ZuliPowerReadingSensor(CoordinatorEntity, SensorEntity):
         self._power_reading_key = power_reading_key
         self._sensor_class = sensor_class
         self._unit = unit
+        self._value: int | None = None
         self.__set_state(coordinator.data) # type: ignore
     
     def __set_state(self, state: ZuliState) -> bool:

@@ -8,11 +8,12 @@
       "service_uuid": "04ee929b-bb13-4e77-8160-18552daf06e1"
     }
   ],
+  "documentation": "https://github.com/byerlyb20/zuli-home-assistant",
+  "issue_tracker": "https://github.com/byerlyb20/zuli-home-assistant/issues",
   "codeowners": ["@byerlyb20"],
   "config_flow": true,
   "dependencies": ["bluetooth", "switch", "light", "sensor", "bluetooth_adapters"],
-  "documentation": "https://www.home-assistant.io/integrations/zuli",
   "iot_class": "local_polling",
   "quality_scale": "internal",
-  "requirements": ["zuli==0.2.1"]
+  "requirements": ["zuli==0.2.5"]
 }

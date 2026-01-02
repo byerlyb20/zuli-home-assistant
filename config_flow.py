@@ -6,7 +6,7 @@ from typing import Any
 
 from homeassistant import config_entries
 from homeassistant.components.bluetooth import BluetoothServiceInfoBleak
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.config_entries import ConfigFlowResult
 
 from .const import DOMAIN
 
@@ -19,24 +19,24 @@ class ZuliConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_bluetooth(
         self, discovery_info: BluetoothServiceInfoBleak
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle Bluetooth discovery."""
         await self.async_set_unique_id(discovery_info.address)
         self._abort_if_unique_id_configured()
 
         self.context["title_placeholders"] = {
-            "name": discovery_info.name or "Zuli Smartplug"
+            "name": f"Smartplug ({discovery_info.address})"
         }
 
         return await self.async_step_confirm()
 
     async def async_step_confirm(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle user confirmation of discovered device."""
         if user_input is not None:
             return self.async_create_entry(
-                title=self.context["title_placeholders"]["name"],
+                title=self.context["title_placeholders"]["name"], # type: ignore
                 data={"address": self.unique_id},
             )
 

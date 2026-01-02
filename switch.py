@@ -30,9 +30,6 @@ async def async_setup_entry(
 class ZuliSwitch(CoordinatorEntity, SwitchEntity):
     """Representation of a Zuli Smartplug in appliance mode."""
 
-    _state: bool | None
-    _is_appliance: bool | None
-
     def __init__(self, coordinator: ZuliCoordinator, name: str) -> None:
         super().__init__(coordinator)
         self._device: ZuliSmartplug = coordinator.device # type: ignore
@@ -41,10 +38,7 @@ class ZuliSwitch(CoordinatorEntity, SwitchEntity):
     
     def __set_state(self, state: ZuliState):
         brightness = state["brightness"]
-        if brightness == None:
-            self._state = None
-        else:
-            self._state = brightness > 0
+        self._state: bool | None = None if brightness == None else brightness > 0
         self._is_appliance = state["is_appliance"]
 
     @callback
@@ -71,7 +65,7 @@ class ZuliSwitch(CoordinatorEntity, SwitchEntity):
 
     @property
     def available(self) -> bool:
-        return self._is_appliance == True
+        return self._is_appliance == True and self.coordinator.last_update_success
 
     @property
     def is_on(self) -> bool | None:
@@ -79,10 +73,13 @@ class ZuliSwitch(CoordinatorEntity, SwitchEntity):
 
     async def async_turn_on(self, **kwargs):
         try:
+            _LOGGER.debug("Turning switch on")
             await self._device.on(100)
+            _LOGGER.debug("Switch turned on")
             self._state = True
             self.async_write_ha_state()
         except Exception as e:
+            _LOGGER.error("Unable to turn switch on")
             self._state = None
             self.async_write_ha_state()
             raise e
@@ -91,10 +88,13 @@ class ZuliSwitch(CoordinatorEntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs):
         try:
+            _LOGGER.debug("Turning switch off")
             await self._device.off()
+            _LOGGER.debug("Switch turned off")
             self._state = False
             self.async_write_ha_state()
         except Exception as e:
+            _LOGGER.error("Unable to turn switch off")
             self._state = None
             self.async_write_ha_state()
             raise e
