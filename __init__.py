@@ -59,13 +59,16 @@ class ZuliCoordinator(DataUpdateCoordinator):
         self._device: ZuliSmartplug | None = None
 
     async def _get_device(self, _: str):
+        _LOGGER.debug("Getting BLEDevice handle from address %s", self._address)
         if (ble_device := bluetooth.async_ble_device_from_address(
             self._hass, self._address.upper(), connectable=True
         )) is None:
+            _LOGGER.error("Could not find device")
             raise ConfigEntryNotReady(f"Could not find Zuli device at {self._address}")
         return ble_device
 
     async def _async_setup(self):
+        _LOGGER.debug("Creating ZuliSmartplug instance for %s", self._address)
         self.device = ZuliSmartplug(self._address, self._get_device, num_retries=2)        
         await self.async_request_refresh()
 
