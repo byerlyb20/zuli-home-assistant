@@ -15,7 +15,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import DOMAIN
 
-PLATFORMS: list[str] = ["switch", "light", "sensor"]
+PLATFORMS: list[str] = ["switch", "light", "sensor", "select"]
 _LOGGER = logging.getLogger(__name__)
 
 
