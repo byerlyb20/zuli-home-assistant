@@ -1,7 +1,6 @@
 """Platform for select integration."""
 from __future__ import annotations
 from enum import Enum
-from functools import cached_property
 import logging
 from zuli.smartplug import ZuliSmartplug
 
@@ -49,15 +48,15 @@ class ZuliHardwareType(CoordinatorEntity, SelectEntity): # type: ignore
         self.__set_state(self.coordinator.data) # type: ignore
         self.async_write_ha_state()
 
-    @cached_property
+    @property
     def unique_id(self) -> str:
         return f"{DOMAIN}_{self._device.address}_mode"
 
-    @cached_property
+    @property
     def name(self) -> str:
         return "Mode"
 
-    @cached_property
+    @property
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             identifiers={(DOMAIN, self._device.address)},
@@ -66,15 +65,15 @@ class ZuliHardwareType(CoordinatorEntity, SelectEntity): # type: ignore
             name=self._name,
         )
 
-    @cached_property
+    @property
     def current_option(self) -> str:
         return (ZuliMode.APPLIANCE if self._is_appliance else ZuliMode.DIMMABLE_LIGHT).value
     
-    @cached_property
+    @property
     def options(self) -> list[str]:
         return [mode.value for mode in ZuliMode]
     
-    @cached_property
+    @property
     def entity_registry_visible_default(self) -> bool:
         return False
 
